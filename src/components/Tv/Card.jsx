@@ -27,7 +27,7 @@ function CardTV({ header, patient, message }) {
       return (
         <div className="align-items-center justify-content-center mt-2">
           <div
-            className="card border-primary mb-3"
+            className="card border-info mb-3"
             style={{ maxWidth: "18rem" }}
           >
             <div className="card-header fw-bold bg-success bg-opacity-50">{header}</div>

@@ -4,7 +4,7 @@ function DoctorButons({ id, onUpdateStatus }) {
   const storageKey = `cor-button-${id}`;
 
   const [cor, setCor] = useState(() => {
-    return localStorage.getItem(storageKey) || "btn-primary";
+    return localStorage.getItem(storageKey) || "btn-info";
   });
 
   const handleClick = (newStatus, newColor) => {
@@ -23,9 +23,9 @@ function DoctorButons({ id, onUpdateStatus }) {
         className={`btn ${cor} btn-sm me-1`}
         onClick={() => handleClick(1, "btn-warning")}
         type="button"
-        disabled={cor !== "btn-primary"}
+        disabled={cor !== "btn-info"}
       >
-        {cor === "btn-primary" ? "Atender" : "Em atendimento"}
+        {cor === "btn-info" ? "Atender" : "Em atendimento"}
       </button>
 
       {cor === "btn-warning" && (
