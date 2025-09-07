@@ -31,14 +31,7 @@ function Nav() {
                     Home
                   </NavLink>
                 </li>
-                <li className="nav-item fw-bolder btn text-white">
-                  <NavLink to={"/tv"} className={({ isActive }) =>
-                  isActive ? "nav-link active text-white" : "nav-link"
-                }>
-                    TV 📺
-                  </NavLink>
-                </li>
-
+  
              
                 <li className="nav-item fw-bolder btn btn-info">
                   

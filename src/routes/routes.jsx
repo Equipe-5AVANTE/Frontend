@@ -19,7 +19,8 @@ function RoutesNav() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="tv" element={<TV />} />
-              <Route path="areamedica" element={<LoginPage/>} />
+              <Route path="login" element={<LoginPage/>} />
+              <Route path="areamedica" element={<AreaMedica/>} />
               <Route path="cadastro" element={<Cadastro />} />
             </Routes>
           </div>

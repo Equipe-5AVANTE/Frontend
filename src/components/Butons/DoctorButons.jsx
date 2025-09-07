@@ -1,21 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 function DoctorButons({ id, onUpdateStatus }) {
-  const storageKey = `cor-button-${id}`;
-
-  const [cor, setCor] = useState(() => {
-    return localStorage.getItem(storageKey) || "btn-info";
-  });
+  const [cor, setCor] = useState("btn-info");
 
   const handleClick = (newStatus, newColor) => {
-    //console.log(`Paciente ${id} alterado para o Status ${newStatus}`);
     onUpdateStatus(id, newStatus);
     setCor(newColor);
   };
-
-  useEffect(() => {
-    localStorage.setItem(storageKey, cor);
-  }, [cor, storageKey]);
 
   return (
     <>
@@ -42,3 +33,5 @@ function DoctorButons({ id, onUpdateStatus }) {
 }
 
 export default DoctorButons;
+
+

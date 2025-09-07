@@ -7,9 +7,8 @@ import { usePatientesStates } from "../../context";
 
 function AreaMedica() {
   const {
-    updatePatientLevel,
+
     updatePatientStatus,
-    filterTrige,
     filterDoctor,
     filterAttended,
   } = usePatientesStates();
@@ -17,21 +16,11 @@ function AreaMedica() {
   return (
     <>
       <Tabs
-        nameTabThree={"Atendidos"}
-        Tab={true}
+      
         title={"Área Médica"}
-        subtitleUne={"Triagem"}
-        subtitleTwo={"Atendimento"}
+       subtitleUne={"Atendimento"}
+        subtitleTwo={"Registros"}
         tabUne={
-          <Table
-            patientes={filterTrige}
-            mensagem={"Nenhum paciente em triagem"}
-            Actions={(id) => (
-              <TrigeButons id={id} onUpdateLevel={updatePatientLevel} />
-            )}
-          />
-        }
-        tabTwo={
           <Table
             patientes={filterDoctor}
             mensagem={"Nenhum paciente  para atendimento"}
@@ -40,13 +29,14 @@ function AreaMedica() {
             )}
           />
         }
-        TabThree={
+        tabTwo={
           <Table
             patientes={filterAttended}
             mensagem={"Nenhum já atendido"}
             Actions={(id) => <RegistrationButons id={id} />}
           />
         }
+      
       />
     </>
   );
