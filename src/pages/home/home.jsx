@@ -1,7 +1,7 @@
 import Img from "../../assets/img/baner2.jpg";
-import TV from "../../assets/img/tv.jpg";
-import Areamedica from "../../assets/img/areamedica.jpeg";
-import Cadastro from "../../assets/img/cadastro.jpeg";
+import TV from "../../assets/img/tv.png";
+import Areamedica from "../../assets/img/areamedica.png";
+import Cadastro from "../../assets/img/cadastro.png";
 import { Link } from "react-router-dom";
 
 function Home() {
