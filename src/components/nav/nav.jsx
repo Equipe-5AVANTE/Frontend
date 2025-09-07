@@ -39,14 +39,7 @@ function Nav() {
                   </NavLink>
                 </li>
 
-                <li className="nav-item fw-bolder  btn ">
-                  
-                  <NavLink to={"cadastro"} className={({ isActive }) =>
-                  isActive ? "nav-link active text-white" : "nav-link"
-                }>
-                    Cadastro
-                  </NavLink>
-                </li>
+             
                 <li className="nav-item fw-bolder btn btn-info">
                   
                   <NavLink to={"areamedica"} className={"nav-link "}>

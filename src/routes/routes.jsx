@@ -7,6 +7,7 @@ import { PatientesStatesProvider } from "../context/index.jsx";
 import TV from "../pages/Tv/index.jsx";
 import Footer from "../components/footer/index.jsx";
 import ToastNotifications from "../components/Alert/index.jsx";
+import LoginPage from "../pages/login/index.jsx";
 
 function RoutesNav() {
   return (
@@ -18,7 +19,7 @@ function RoutesNav() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="tv" element={<TV />} />
-              <Route path="areamedica" element={<AreaMedica />} />
+              <Route path="areamedica" element={<LoginPage/>} />
               <Route path="cadastro" element={<Cadastro />} />
             </Routes>
           </div>
