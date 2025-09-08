@@ -51,7 +51,7 @@ const Navbar = ({ activeTab, setActiveTab }) => {
               )}
             </span>
             <button
-              className="btn btn-outline-light"
+              className="btn btn-light"
               onClick={logout}
             >
               Sair

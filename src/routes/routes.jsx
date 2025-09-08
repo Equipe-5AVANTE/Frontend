@@ -31,7 +31,6 @@ function RoutesNav() {
                   element={
                     <PrivateRoute>
                       <Cadastro />
-                      <TV />
                     </PrivateRoute>
                   }
                 />
@@ -43,7 +42,14 @@ function RoutesNav() {
                     </PrivateRoute>
                   }
                 />
-
+                     <Route
+                  path="/TV"
+                  element={
+                    <PrivateRoute>
+                      <TV />
+                    </PrivateRoute>
+                  }
+                  />
                 {/* Dashboard como “gateway” */}
                 <Route
                   path="/dashboard"
