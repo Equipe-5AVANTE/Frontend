@@ -35,7 +35,7 @@ function Nav() {
              
                 <li className="nav-item fw-bolder btn btn-info">
                   
-                  <NavLink to={"areamedica"} className={"nav-link "}>
+                  <NavLink to={"login"} className={"nav-link "}>
                     Entrar
                   </NavLink>
                 </li>

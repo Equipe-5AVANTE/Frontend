@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
+import Login from './Login';
+import Cadastro from './Cadastro';
 
-import Cadastro from '../cadastro/cadastro';
-import SignInForm from '../../components/Signin';
-
-const LoginPage= () => {
+const AuthPage = () => {
   const [isLoginMode, setIsLoginMode] = useState(true);
 
   const toggleMode = () => {
@@ -13,7 +12,7 @@ const LoginPage= () => {
   return (
     <>
       {isLoginMode ? (
-        <SignInForm onToggleMode={toggleMode} />
+        <Login onToggleMode={toggleMode} />
       ) : (
         <Cadastro onToggleMode={toggleMode} />
       )}
@@ -21,5 +20,5 @@ const LoginPage= () => {
   );
 };
 
-export default LoginPage;
+export default AuthPage;
 

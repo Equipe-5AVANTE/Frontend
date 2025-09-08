@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState, useEffect} from "react";
-import api from "../api";
+import { createContext, useContext, useState, useEffect } from "react";
+import api from "../api/index.js";
 
 const PatientesStatesContext = createContext();
 
@@ -11,10 +11,15 @@ export function PatientesStatesProvider({ children }) {
     const fetchPatients = async () => {
       try {
         const response = await api.get("/patients");
-        setPacientes(response.data.sort((a, b) => {
-          if (b.status !== a.status) return b.status - a.status;
-          return b.level - a.level;
-        }));
+        let vvv = setPacientes(
+          response.data.patients.sort((a, b) => {
+            if (b.status !== a.status) return b.status - a.status;
+            return b.level - a.level;
+
+          })
+       
+        );
+          console.log("pacientes"+ vvv)
       } catch (error) {
         console.error("Error fetching patients:", error);
       }
@@ -25,10 +30,12 @@ export function PatientesStatesProvider({ children }) {
   const addPatient = async (newPatient) => {
     try {
       const response = await api.post("/patients", newPatient);
-      setPacientes(prev => [...prev, response.data].sort((a, b) => {
-        if (b.status !== a.status) return b.status - a.status;
-        return b.level - a.level;
-      }));
+      setPacientes((prev) =>
+        [...prev, response.data.patients].sort((a, b) => {
+          if (b.status !== a.status) return b.status - a.status;
+          return b.level - a.level;
+        })
+      );
     } catch (error) {
       console.error("Error adding patient:", error);
     }
@@ -37,11 +44,13 @@ export function PatientesStatesProvider({ children }) {
   const updatePatientLevel = async (id, newLevel) => {
     try {
       const response = await api.patch(`/patients/${id}`, { level: newLevel });
-      setPacientes(prev =>
-        prev.map(p => (p.id === id ? response.data : p)).sort((a, b) => {
-          if (b.status !== a.status) return b.status - a.status;
-          return b.level - a.level;
-        })
+      setPacientes((prev) =>
+        prev
+          .map((p) => (p.id === id ? response.data.patients : p))
+          .sort((a, b) => {
+            if (b.status !== a.status) return b.status - a.status;
+            return b.level - a.level;
+          })
       );
     } catch (error) {
       console.error("Error updating patient level:", error);
@@ -50,12 +59,16 @@ export function PatientesStatesProvider({ children }) {
 
   const updatePatientStatus = async (id, newStatus) => {
     try {
-      const response = await api.patch(`/patients/${id}`, { status: newStatus });
-      setPacientes(prev =>
-        prev.map(p => (p.id === id ? response.data : p)).sort((a, b) => {
-          if (b.status !== a.status) return b.status - a.status;
-          return b.level - a.level;
-        })
+      const response = await api.patch(`/patients/${id}`, {
+        status: newStatus,
+      });
+      setPacientes((prev) =>
+        prev
+          .map((p) => (p.id === id ? response.data.patients : p))
+          .sort((a, b) => {
+            if (b.status !== a.status) return b.status - a.status;
+            return b.level - a.level;
+          })
       );
     } catch (error) {
       console.error("Error updating patient status:", error);
@@ -78,7 +91,7 @@ export function PatientesStatesProvider({ children }) {
         updatePatientStatus,
         filterTrige,
         filterDoctor,
-        filterAttended
+        filterAttended,
       }}
     >
       {children}
@@ -89,5 +102,3 @@ export function PatientesStatesProvider({ children }) {
 export function usePatientesStates() {
   return useContext(PatientesStatesContext);
 }
-
-

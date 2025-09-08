@@ -1,84 +1,97 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
- 
-  faEnvelope,
-  faEye,
-  faEyeSlash,
-} from "@fortawesome/free-solid-svg-icons";
-import {
-  Col,
-  Row,
-  Form,
-  Card,
-  Button,
-
-  InputGroup,
-} from "@themesberg/react-bootstrap";
-import { Link } from "react-router-dom";
-import BgImage from "../../assets/img/areamedica.jpeg";
-import { useState } from "react";
+import React, { useState } from "react";
+import { useAuth } from "../../context/Auth";
+import { useNavigate } from "react-router-dom";
 
 function SignInForm() {
-  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const { login } = useAuth();
+  const navigate = useNavigate(); // aqui
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage("");
+
+    const result = await login(formData.email, formData.password);
+
+    if (result.success) {
+      navigate("/dashboard"); // sempre vai para o Dashboard
+    } else {
+      setMessage(result.message);
+    }
+
+    setLoading(false);
+  };
 
   return (
-    <main className="" >
-      <section className="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
-        
-        
-          <Row
-            className="justify-content-center form-bg-image"
-            style={{ backgroundImage: `url(${BgImage})` }}
-          >
-            <Col
-              xs={12}
-              className="d-flex align-items-center justify-content-center"
-            >
-              <div className="bg-white shadow-soft border rounded border-light p-4 p-lg-5 w-100 fmxw-500">
-                <div className="text-center text-md-center mb-4 mt-md-0">
-                  <h3 className="mb-0">Entre no painel de Agendamentos</h3>
+    <div className="container-fluid vh-100 d-flex align-items-center justify-content-center bg-light">
+      <div className="row w-100 justify-content-center">
+        <div className="col-md-6 col-lg-4">
+          <div className="card shadow">
+            <div className="card-body p-4">
+              <h2 className="card-title text-center mb-4">Login</h2>
+
+              {message && (
+                <div className="alert alert-danger" role="alert">
+                  {message}
                 </div>
-                <Form>
-                  <Form.Group id="email" className="mb-4">
-                    <Form.Label>Seu Email</Form.Label>
-                    <InputGroup>
-                      <InputGroup.Text>
-                        <FontAwesomeIcon icon={faEnvelope} />
-                      </InputGroup.Text>
-                      <Form.Control
-                        type="email"
-                        placeholder="example@company.com"
-                      />
-                    </InputGroup>
-                  </Form.Group>
-                  <Form.Group id="password" className="mb-4">
-                    <Form.Label>Sua Senha</Form.Label>
-                    <InputGroup>
-                      <Form.Control
-                        type={showPassword ? "text" : "password"}
-                        placeholder="Senha"
-                      />
-                      <Button
-                        variant="outline-secondary"
-                        onClick={() => setShowPassword(!showPassword)}
-                        type="button"
-                      >
-                        <FontAwesomeIcon
-                          icon={showPassword ? faEyeSlash : faEye}
-                        />
-                      </Button>
-                    </InputGroup>
-                  </Form.Group>
-                  <Button variant="primary" type="submit" className="w-100">
-                    Entrar
-                  </Button>
-                </Form>
-              </div>
-            </Col>
-          </Row>
-       
-      </section>
-    </main>
+              )}
+
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label htmlFor="email" className="form-label">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="Digite seu email"
+                    required
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label htmlFor="password" className="form-label">
+                    Senha
+                  </label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder="Digite sua senha"
+                    required
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="btn btn-primary w-100 mb-3"
+                  disabled={loading}
+                >
+                  {loading ? "Entrando..." : "Entrar"}
+                </button>
+              </form>
+
+            
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
