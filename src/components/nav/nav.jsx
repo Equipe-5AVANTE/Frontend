@@ -9,7 +9,11 @@ function Nav() {
     <header>
       <nav className="navbar navbar-expand-lg navbar-light bg-success bg-opacity-50 border-bottom">
         <div className="container-fluid container">
-          <img src={Logo} alt="Logo" style={{ width: "150px", height: "auto" }} />
+          <img
+            src={Logo}
+            alt="Logo"
+            style={{ width: "150px", height: "auto" }}
+          />
           <button
             className="navbar-toggler"
             type="button"
@@ -25,7 +29,12 @@ function Nav() {
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav ms-auto fw-bolder d-flex gap-2 fw-bolder">
               <li className="nav-item  btn btn-outline-light">
-                <NavLink to="/" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
+                <NavLink
+                  to="/"
+                  className={({ isActive }) =>
+                    isActive ? "nav-link active" : "nav-link"
+                  }
+                >
                   Home
                 </NavLink>
               </li>
@@ -38,7 +47,7 @@ function Nav() {
                 </li>
               )}
 
-              {user && (
+              {user && !isAdmin() && (
                 <>
                   <li className="nav-item btn btn-outline-light">
                     <NavLink to="/tv" className="nav-link ">
@@ -46,17 +55,25 @@ function Nav() {
                     </NavLink>
                   </li>
 
-                  {isAdmin() && (
-                    <li className="nav-item btn btn-outline-light">
-                      <NavLink to="/areamedica" className="nav-link ">
-                        Área Médica
-                      </NavLink>
-                    </li>
-                  )}
-
                   <li className="nav-item btn btn-outline-light">
                     <NavLink to="/cadastro" className="nav-link ">
                       Cadastro
+                    </NavLink>
+                  </li>
+                </>
+              )}
+
+              {isAdmin() && (
+                <>
+                  <li className="nav-item btn btn-outline-light">
+                    <NavLink to="/areamedica" className="nav-link ">
+                      Área Médica
+                    </NavLink>
+                  </li>
+
+                  <li className="nav-item btn btn-outline-light">
+                    <NavLink to="/regitroUsuario" className="nav-link ">
+                      Administração
                     </NavLink>
                   </li>
                 </>
@@ -67,7 +84,11 @@ function Nav() {
               <div className="d-flex align-items-center ms-3">
                 <span className="text-white me-3">
                   Olá, {user?.nome || user?.name}
-                  {isAdmin() && <span className="badge bg-warning text-dark ms-2">Doutor</span>}
+                  {isAdmin() && (
+                    <span className="badge bg-warning text-dark ms-2">
+                      Doutor
+                    </span>
+                  )}
                 </span>
                 <button className="btn btn-outline-light" onClick={logout}>
                   Sair

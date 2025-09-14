@@ -34,6 +34,14 @@ function RoutesNav() {
                     </PrivateRoute>
                   }
                 />
+                   <Route
+                  path="/regitroUsuario"
+                  element={
+                    <PrivateRoute>
+                      <h1 className="text-center">resgitro</h1>
+                    </PrivateRoute>
+                  }
+                />
                 <Route
                   path="/areamedica"
                   element={
