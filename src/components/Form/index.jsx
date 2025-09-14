@@ -1,33 +1,27 @@
 /* eslint-disable no-unused-vars */
-import { usePatientesStates } from "../../context";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-function Form() {
-  const { setPacientes } = usePatientesStates();
+function Form({ onAddPatient }) {
   const [name, setName] = useState("");
   const [reason, setReason] = useState("");
 
-  function addPatient(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    setPacientes((prev) => [
-      ...prev,
-      {
-        id: crypto.randomUUID(),
-        name,
-        reason,
-        level: 0,
-        status: 0,
-      },
-    ]);
-    
+    const newPatient = {
+      name,
+      reason,
+      level: 0,
+      status: 0,
+    };
+    await onAddPatient(newPatient);
     setName("");
     setReason("");
-     toast.success("Paciente cadastra com sucesso!");
-    
+    toast.success("Paciente cadastrado com sucesso!");
   }
+
   return (
-    <form id="patient-form" onSubmit={addPatient}>
+    <form id="patient-form" onSubmit={handleSubmit}>
       <div className="mb-3">
         <label htmlFor="patient-name" className="form-label">
           Nome do Paciente
@@ -43,7 +37,7 @@ function Form() {
       </div>
       <div className="mb-3">
         <label htmlFor="patient-reason" className="form-label">
-          Motivo da Visita
+          Motivo da Visão
         </label>
         <textarea
           className="form-control"
@@ -62,3 +56,5 @@ function Form() {
 }
 
 export default Form;
+
+
