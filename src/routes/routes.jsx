@@ -11,6 +11,7 @@ import Dashboard from "../pages/Dashboard/index.jsx";
 import Home from "../pages/home/home.jsx";
 import AreaMedica from "../pages/areamedica/areamedica.jsx";
 import Cadastro from "../pages/cadastro/cadastro.jsx";
+import Unauthorized from "../pages/unauthorized/index.jsx";
 
 function RoutesNav() {
   return (
@@ -21,49 +22,51 @@ function RoutesNav() {
           <div className="container-fluid d-flex flex-column min-vh-100 p-0 app-container">
             <div className="flex-grow-1 main-content">
               <Routes>
-                {/* Rotas públicas */}
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<LoginPage />} />
+                <Route path="/unauthorized" element={<Unauthorized/>} />
 
-                {/* Rotas privadas */}
-                <Route
-                  path="/cadastro"
-                  element={
-                    <PrivateRoute>
-                      <Cadastro />
-                    </PrivateRoute>
-                  }
-                />
-                   <Route
-                  path="/regitroUsuario"
-                  element={
-                    <PrivateRoute>
-                      <h1 className="text-center">resgitro</h1>
-                    </PrivateRoute>
-                  }
-                />
                 <Route
                   path="/areamedica"
                   element={
-                    <PrivateRoute>
+                    <PrivateRoute roles={["DOCTOR"]}>
                       <AreaMedica />
                     </PrivateRoute>
                   }
                 />
-                     <Route
-                  path="/TV"
+                <Route
+                  path="/regitroUsuario"
                   element={
-                    <PrivateRoute>
+                    <PrivateRoute roles={["DOCTOR"]}>
+                      <h1 className="text-center">
+                        Registro de Usuário (Admin)
+                      </h1>
+                    </PrivateRoute>
+                  }
+                />
+
+                <Route
+                  path="/tv"
+                  element={
+                    <PrivateRoute roles={["ATTENDANT"]}>
                       <TV />
                     </PrivateRoute>
                   }
-                  />
-                {/* Dashboard como “gateway” */}
+                />
+
                 <Route
                   path="/dashboard"
                   element={
-                    <PrivateRoute>
-                      <Dashboard /> {/* Aqui está seu Dashboard */}
+                    <PrivateRoute  >
+                      <Dashboard />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/cadastro"
+                  element={
+                    <PrivateRoute roles={["DOCTOR", "ATTENDANT"]}>
+                      <Cadastro />
                     </PrivateRoute>
                   }
                 />
