@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useEffect } from "react";
 import api from "../api/index.js";
@@ -5,55 +6,57 @@ import api from "../api/index.js";
 const PatientesStatesContext = createContext();
 
 export function PatientesStatesProvider({ children }) {
-  const [pacientes, setPacientes] = useState([]);
+  const [patients, setPatients] = useState([]);
+  const [triagePatients, setTriagePatients] = useState([]);
+  const [doctorPatients, setDoctorPatients] = useState([]);
+  const [attendedPatients, setAttendedPatients] = useState([]);
 
   useEffect(() => {
     const fetchPatients = async () => {
       try {
         const response = await api.get("/patients");
-        let vvv = setPacientes(
-          response.data.patients.sort((a, b) => {
-            if (b.status !== a.status) return b.status - a.status;
-            return b.level - a.level;
-
-          })
-       
-        );
-          console.log("pacientes"+ vvv)
+        setPatients(response.data);
       } catch (error) {
-        console.error("Error fetching patients:", error);
+        console.error(error);
       }
     };
+     const fetchTriagePatients = async () => {
+    const response = await api.get("/patients?filter=triage");
+    setTriagePatients(response.data);
+    console.log(response.data)
+  };
+
+  const fetchDoctorPatients = async () => {
+    const response = await api.get("/patients?filter=doctor");
+    setDoctorPatients(response.data);
+  };
+
+  const fetchAttendedPatients = async () => {
+    const response = await api.get("/patients?filter=attended");
+    setAttendedPatients(response.data);
+  };
+
     fetchPatients();
+    fetchTriagePatients();
+    fetchDoctorPatients();
+    fetchAttendedPatients()
   }, []);
 
   const addPatient = async (newPatient) => {
     try {
       const response = await api.post("/patients", newPatient);
-      setPacientes((prev) =>
-        [...prev, response.data.patients].sort((a, b) => {
-          if (b.status !== a.status) return b.status - a.status;
-          return b.level - a.level;
-        })
-      );
+      setPatients((prev) => [...prev, response.data]);
     } catch (error) {
-      console.error("Error adding patient:", error);
+      console.error(error);
     }
   };
 
   const updatePatientLevel = async (id, newLevel) => {
     try {
       const response = await api.patch(`/patients/${id}`, { level: newLevel });
-      setPacientes((prev) =>
-        prev
-          .map((p) => (p.id === id ? response.data.patients : p))
-          .sort((a, b) => {
-            if (b.status !== a.status) return b.status - a.status;
-            return b.level - a.level;
-          })
-      );
+      setPatients((prev) => prev.map((p) => (p.id === id ? response.data : p)));
     } catch (error) {
-      console.error("Error updating patient level:", error);
+      console.error(error);
     }
   };
 
@@ -62,36 +65,24 @@ export function PatientesStatesProvider({ children }) {
       const response = await api.patch(`/patients/${id}`, {
         status: newStatus,
       });
-      setPacientes((prev) =>
-        prev
-          .map((p) => (p.id === id ? response.data.patients : p))
-          .sort((a, b) => {
-            if (b.status !== a.status) return b.status - a.status;
-            return b.level - a.level;
-          })
-      );
+      setPatients((prev) => prev.map((p) => (p.id === id ? response.data : p)));
     } catch (error) {
-      console.error("Error updating patient status:", error);
+      console.error(error);
     }
   };
 
-  const filterTrige = pacientes.filter((patient) => patient.level === 0);
-  const filterDoctor = pacientes.filter(
-    (patient) => patient.level != 0 && patient.status != 2
-  );
-  const filterAttended = pacientes.filter((patient) => patient.status === 2);
+
 
   return (
     <PatientesStatesContext.Provider
       value={{
-        pacientes,
-        setPacientes,
+        patients,
         addPatient,
         updatePatientLevel,
         updatePatientStatus,
-        filterTrige,
-        filterDoctor,
-        filterAttended,
+        triagePatients,
+        doctorPatients,
+        attendedPatients,
       }}
     >
       {children}

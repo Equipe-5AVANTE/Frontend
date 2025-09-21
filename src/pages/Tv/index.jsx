@@ -4,14 +4,14 @@ import CardTV from "../../components/Tv/Card";
 import { useState, useEffect } from "react";
 
 function TV() {
-  const { filterDoctor } = usePatientesStates();
+  const { doctorPatients } = usePatientesStates();
   const [nextPatient, setNextPatient] = useState();
   const [treatedPatients, setTreatedPatients] = useState([]);
 
   useEffect(() => {
-    const foundNextPatient = filterDoctor.find((p) => p.status === 0);
+    const foundNextPatient = doctorPatients.find((p) => p.status === 0);
 
-    const foundTreatedPatients = filterDoctor.filter((p) => p.status === 1);
+    const foundTreatedPatients = doctorPatients.filter((p) => p.status === 1);
 
     setNextPatient(foundNextPatient);
 
@@ -19,7 +19,7 @@ function TV() {
       (patient) => patient.name
     );
     setTreatedPatients(treatedPatientsNames);
-  }, [filterDoctor]);
+  }, [doctorPatients]);
 
   console.log("Pacientes em atendimento:", treatedPatients);
 
@@ -44,7 +44,7 @@ function TV() {
         </div>
         <div className="col-12 text-center">
           <ListTV
-            patientes={filterDoctor}
+            patientes={doctorPatients}
             mensagem={"Nenhum paciente em espera"}
           />
         </div>

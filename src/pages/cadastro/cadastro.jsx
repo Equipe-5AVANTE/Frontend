@@ -5,7 +5,8 @@ import Tabs from "../../components/Tabs";
 import { usePatientesStates } from "../../context";
 import RegistrationButons from "../../components/Butons/RegistrationButons";
 function Cadastro() {
-  const { addPatient, filterTrige, filterDoctor, updatePatientLevel } =
+  const { addPatient, triagePatients,
+        doctorPatients, updatePatientLevel } =
     usePatientesStates();
 
   return (
@@ -20,7 +21,7 @@ function Cadastro() {
         tabUne={<Form onAddPatient={addPatient} />}
         tabTwo={
          <Table
-            patientes={filterTrige}
+            patientes={triagePatients}
             mensagem={"Nenhum paciente em triagem"}
             Actions={(id) => (
               <TrigeButons id={id} onUpdateLevel={updatePatientLevel} />
@@ -29,7 +30,7 @@ function Cadastro() {
         }
         TabThree={
          <Table
-            patientes={filterDoctor}
+            patientes={doctorPatients}
             mensagem={"Nenhuma ficha de paciente"}
             tv={false}
             Actions={(id) => <RegistrationButons id={id} />}

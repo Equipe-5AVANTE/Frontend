@@ -9,8 +9,8 @@ function AreaMedica() {
   const {
 
     updatePatientStatus,
-    filterDoctor,
-    filterAttended,
+      doctorPatients,
+        attendedPatients,
   } = usePatientesStates();
 
   return (
@@ -22,7 +22,7 @@ function AreaMedica() {
         subtitleTwo={"Registros"}
         tabUne={
           <Table
-            patientes={filterDoctor}
+            patientes={doctorPatients}
             mensagem={"Nenhum paciente  para atendimento"}
             Actions={(id) => (
               <DoctorButons id={id} onUpdateStatus={updatePatientStatus} />
@@ -31,7 +31,7 @@ function AreaMedica() {
         }
         tabTwo={
           <Table
-            patientes={filterAttended}
+            patientes={attendedPatients}
             mensagem={"Nenhum já atendido"}
             Actions={(id) => <RegistrationButons id={id} />}
           />
