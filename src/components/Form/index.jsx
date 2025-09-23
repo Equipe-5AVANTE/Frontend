@@ -1,54 +1,93 @@
-/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { toast } from "react-toastify";
+
+// Estrutura de dados para as prioridades
+const priorities = [
+  { level: 3, label: "Emergência", colorClass: "danger" },
+  { level: 2, label: "Urgente", colorClass: "warning" },
+  { level: 1, label: "Pouca Urgência", colorClass: "success" },
+];
 
 function Form({ onAddPatient }) {
   const [name, setName] = useState("");
   const [reason, setReason] = useState("");
+  const [level, setLevel] = useState(null); // Começa sem seleção
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const newPatient = {
-      name,
-      reason,
-      level: 0,
-      status: 0,
-    };
-    await onAddPatient(newPatient);
-    setName("");
-    setReason("");
-    toast.success("Paciente cadastrado com sucesso!");
+    if (!level) {
+      toast.error("Selecione um nível de gravidade.");
+      return;
+    }
+
+    const newPatient = { name, reason, level, status: 0 };
+    
+    try {
+      await onAddPatient(newPatient);
+      setName("");
+      setReason("");
+      setLevel(null); // Limpa a seleção
+      toast.success("Paciente cadastrado com sucesso!");
+    // eslint-disable-next-line no-unused-vars
+    } catch (error) {
+      toast.error("Falha ao cadastrar paciente. Tente novamente.");
+    }
   }
 
   return (
     <form id="patient-form" onSubmit={handleSubmit}>
+      {/* Campos de Nome e Motivo */}
       <div className="mb-3">
-        <label htmlFor="patient-name" className="form-label">
-          Nome do Paciente
-        </label>
+        <label className="form-label">Nome do Paciente</label>
         <input
           type="text"
           className="form-control"
-          id="patient-name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
         />
       </div>
       <div className="mb-3">
-        <label htmlFor="patient-reason" className="form-label">
-          Motivo da Visão
-        </label>
+        <label className="form-label">Motivo da Visita</label>
         <textarea
           className="form-control"
-          id="patient-reason"
           rows="3"
           value={reason}
           onChange={(e) => setReason(e.target.value)}
           required
         ></textarea>
       </div>
-      <button type="submit" className="btn btn-success">
+
+      {/* Abas de Seleção de Gravidade (Bootstrap Pills) */}
+      <div className="mb-3">
+        <label className="form-label">Setor de Gravidade</label>
+        <ul className="nav nav-pills nav-fill" role="tablist">
+          {priorities.map((priority) => {
+            const isActive = level === priority.level;
+            const textColor = priority.colorClass === 'warning' ? 'text-dark' : 'text-white';
+
+            return (
+              <li className="nav-item" key={priority.level}>
+                <a
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setLevel(priority.level);
+                  }}
+                  // Classes dinâmicas para cor e estado ativo
+                  className={`nav-link ${isActive ? `active bg-${priority.colorClass} ${textColor}` : `bg-light text-dark border`}`}
+                  role="tab"
+                  aria-selected={isActive}
+                >
+                  {priority.label}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+
+      <button type="submit" className="btn btn-success mt-3 w-100">
         <i className="bi bi-check-circle"></i> Registrar Paciente
       </button>
     </form>
@@ -56,5 +95,3 @@ function Form({ onAddPatient }) {
 }
 
 export default Form;
-
-

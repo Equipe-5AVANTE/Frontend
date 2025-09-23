@@ -1,42 +1,37 @@
 import DoctorButons from "../../components/Butons/DoctorButons";
-import TrigeButons from "../../components/Butons/TrigeButons";
 import RegistrationButons from "../../components/Butons/RegistrationButons";
 import Table from "../../components/Table";
 import Tabs from "../../components/Tabs";
-import { usePatientesStates } from "../../context";
+import { usePatientsStates } from "../../context";
 
 function AreaMedica() {
-  const {
-
-    updatePatientStatus,
-      doctorPatients,
-        attendedPatients,
-  } = usePatientesStates();
+ 
+  const { triagePatients, attendedPatients, updatePatient } = usePatientsStates();
 
   return (
     <>
       <Tabs
-      
         title={"Área Médica"}
-       subtitleUne={"Atendimento"}
+        subtitleUne={"Atendimento"}
         subtitleTwo={"Registros"}
         tabUne={
           <Table
-            patientes={doctorPatients}
-            mensagem={"Nenhum paciente  para atendimento"}
+            
+            patientes={triagePatients}
+            mensagem={"Nenhum paciente para atendimento"}
             Actions={(id) => (
-              <DoctorButons id={id} onUpdateStatus={updatePatientStatus} />
+              <DoctorButons id={id} onUpdate={updatePatient} />
             )}
           />
         }
         tabTwo={
           <Table
             patientes={attendedPatients}
-            mensagem={"Nenhum já atendido"}
+            mensagem={"Nenhum paciente já atendido"}
+           
             Actions={(id) => <RegistrationButons id={id} />}
           />
         }
-      
       />
     </>
   );
