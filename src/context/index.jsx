@@ -1,104 +1,83 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState, useEffect } from "react";
-import api from "../api/index.js";
+import { createContext, useContext, useState, useEffect, useMemo } from "react";
+import { patientService } from "../api/patient.js";
 
-const PatientesStatesContext = createContext();
+const PatientsStatesContext = createContext();
 
-export function PatientesStatesProvider({ children }) {
-  const [pacientes, setPacientes] = useState([]);
-
+export function PatientsStatesProvider({ children }) {
+  const [patients, setPatients] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  patients.sort((a, b) => {
+    if (b.status !== a.status) return b.status - a.status;
+    return b.level - a.level;
+  });
   useEffect(() => {
-    const fetchPatients = async () => {
+    const fetchAll = async () => {
       try {
-        const response = await api.get("/patients");
-        let vvv = setPacientes(
-          response.data.patients.sort((a, b) => {
-            if (b.status !== a.status) return b.status - a.status;
-            return b.level - a.level;
-
-          })
-       
-        );
-          console.log("pacientes"+ vvv)
+        setIsLoading(true);
+        const response = await patientService.getAll();
+        setPatients(response.data);
       } catch (error) {
-        console.error("Error fetching patients:", error);
+        console.error("Falha ao buscar pacientes:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
-    fetchPatients();
+
+    fetchAll();
   }, []);
+  const triagePatients = useMemo(
+    () => patients.filter((p) => p.status === 0),
+    [patients]
+  );
+
+  const doctorPatients = useMemo(() => patients.filter((p) => p.status === 1));
+
+  const attendedPatients = useMemo(
+    () => patients.filter((p) => p.status === 2),
+    [patients]
+  );
 
   const addPatient = async (newPatient) => {
-    try {
-      const response = await api.post("/patients", newPatient);
-      setPacientes((prev) =>
-        [...prev, response.data.patients].sort((a, b) => {
-          if (b.status !== a.status) return b.status - a.status;
-          return b.level - a.level;
-        })
-      );
-    } catch (error) {
-      console.error("Error adding patient:", error);
-    }
+    const response = await patientService.add(newPatient);
+    // Adiciona o novo paciente à lista principal. As listas derivadas se atualizarão sozinhas.
+    setPatients((prev) => [...prev, response.data]);
   };
 
-  const updatePatientLevel = async (id, newLevel) => {
-    try {
-      const response = await api.patch(`/patients/${id}`, { level: newLevel });
-      setPacientes((prev) =>
-        prev
-          .map((p) => (p.id === id ? response.data.patients : p))
-          .sort((a, b) => {
-            if (b.status !== a.status) return b.status - a.status;
-            return b.level - a.level;
-          })
-      );
-    } catch (error) {
-      console.error("Error updating patient level:", error);
-    }
-  };
 
-  const updatePatientStatus = async (id, newStatus) => {
-    try {
-      const response = await api.patch(`/patients/${id}`, {
-        status: newStatus,
-      });
-      setPacientes((prev) =>
-        prev
-          .map((p) => (p.id === id ? response.data.patients : p))
-          .sort((a, b) => {
-            if (b.status !== a.status) return b.status - a.status;
-            return b.level - a.level;
-          })
-      );
-    } catch (error) {
-      console.error("Error updating patient status:", error);
-    }
-  };
+const updatePatient = async (id, data) => {
+  const response = await patientService.update(id, data); 
+  
+  setPatients((prev) => prev.map((p) => (p.id === id ? response.data : p)));
+};
 
-  const filterTrige = pacientes.filter((patient) => patient.level === 0);
-  const filterDoctor = pacientes.filter(
-    (patient) => patient.level != 0 && patient.status != 2
-  );
-  const filterAttended = pacientes.filter((patient) => patient.status === 2);
+  const removePatient = async (id) => {
+    await patientService.remove(id);
+
+    setPatients((prev) => prev.filter((p) => p.id !== id));
+  };
 
   return (
-    <PatientesStatesContext.Provider
+    <PatientsStatesContext.Provider
       value={{
-        pacientes,
-        setPacientes,
+        triagePatients,
+        doctorPatients,
+        attendedPatients,
+
+        patients,
+
         addPatient,
-        updatePatientLevel,
-        updatePatientStatus,
-        filterTrige,
-        filterDoctor,
-        filterAttended,
+        updatePatient,
+        removePatient,
+
+        isLoading,
       }}
     >
       {children}
-    </PatientesStatesContext.Provider>
+    </PatientsStatesContext.Provider>
   );
 }
 
-export function usePatientesStates() {
-  return useContext(PatientesStatesContext);
+export function usePatientsStates() {
+  return useContext(PatientsStatesContext);
 }

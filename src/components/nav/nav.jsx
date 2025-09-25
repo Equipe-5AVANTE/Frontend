@@ -83,7 +83,7 @@ function Nav() {
             {user && (
               <div className="d-flex align-items-center ms-3">
                 <span className="text-white me-3">
-                  Olá, {user?.nome || user?.name}
+                  Olá, {user?.fullName || user?.fullName}
                   {isAdmin() && (
                     <span className="badge bg-warning text-dark ms-2">
                       Doutor

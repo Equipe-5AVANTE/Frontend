@@ -1,11 +1,11 @@
 import html2pdf from "html2pdf.js";
-import { usePatientesStates } from "../../context";
+import { usePatientsStates } from "../../context";
 
 function RegistrationButons({ id }) {
-  const { pacientes } = usePatientesStates();
+  const { patients } = usePatientsStates();
 
   const handleClick = () => {
-    const patient = pacientes.find((p) => p.id === id);
+    const patient = patients.find((p) => p.id === id);
 
     if (!patient) {
       console.error("Paciente não encontrado");

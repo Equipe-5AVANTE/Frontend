@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { authService } from "../../api";
-import { jwtDecode } from "jwt-decode";
+import { createContext, useContext, useState, useEffect } from "react";
+import { authService } from "../../api/auth";
+
 
 const AuthContext = createContext();
 
@@ -20,6 +20,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     checkAuthStatus();
+    
   }, []);
 
   const checkAuthStatus = async () => {
@@ -40,34 +41,29 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const login = async (email, password) => {
-    try {
-      const response = await authService.login(email, password);
 
-      if (response.token) {
-        localStorage.setItem("authToken", response.token);
+const login = async (email, password) => {
+  try {
+  
+    const response = await authService.login(email, password);
 
-        // decodifica o token para pegar os dados do usuário
-        const decoded = jwtDecode(response.token);
-        let aaaa = setUser({
-          fullName: decoded.fullName || decoded.fullName,
-          role: decoded.role,
-        });
-        setIsAuthenticated(true);
-        console.log(aaaa);
-
-        return { success: true };
-      }
-
-      return { success: false, message: "Credenciais inválidas" };
-    } catch (error) {
-      console.error("Erro no login:", error);
-      return {
-        success: false,
-        message: error.response?.data?.message || "Erro ao fazer login",
-      };
+    if (response.token && response.user) { 
+      localStorage.setItem("authToken", response.token);
+      setUser(response.user); 
+      setIsAuthenticated(true);
+      return { success: true };
     }
-  };
+
+    return { success: false, message: "Resposta da API inválida" };
+  } catch (error) {
+    console.error("Erro no login:", error);
+    return {
+      success: false,
+      message: error.response?.data?.message || "Erro ao fazer login",
+    };
+  }
+};
+
 
   const cadastrar = async (fullName, email, password, role = "user") => {
     try {
@@ -90,6 +86,7 @@ export const AuthProvider = ({ children }) => {
 
   const isAdmin = () => {
     return user?.role === "DOCTOR" || user?.Role === "DOCTOR";
+ 
   };
 
   const value = {

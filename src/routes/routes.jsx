@@ -1,6 +1,6 @@
 import { HashRouter, Routes, Route } from "react-router-dom";
 import Nav from "../components/nav/nav.jsx";
-import { PatientesStatesProvider } from "../context/index.jsx";
+import { PatientsStatesProvider } from "../context/index.jsx";
 import TV from "../pages/Tv/index.jsx";
 import Footer from "../components/footer/index.jsx";
 import ToastNotifications from "../components/Alert/index.jsx";
@@ -17,7 +17,7 @@ function RoutesNav() {
   return (
     <HashRouter>
       <AuthProvider>
-        <PatientesStatesProvider>
+        <PatientsStatesProvider>
           <Nav />
           <div className="container-fluid d-flex flex-column min-vh-100 p-0 app-container">
             <div className="flex-grow-1 main-content">
@@ -75,7 +75,7 @@ function RoutesNav() {
             <ToastNotifications position="bottom-left" autoClose={5000} />
             <Footer />
           </div>
-        </PatientesStatesProvider>
+        </PatientsStatesProvider>
       </AuthProvider>
     </HashRouter>
   );
