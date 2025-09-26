@@ -6,7 +6,7 @@ import { usePatientsStates } from "../../context";
 import RegistrationButons from "../../components/Butons/RegistrationButons";
 import { useEffect } from "react";
 function Cadastro() {
-  const { addPatient, triagePatients, attendedPatients, updatePatient, reloadPatients,isLoading } =
+  const { addPatient, triagePatients, updatePatient, reloadPatients,isLoading } =
     usePatientsStates();
 
     // Este useEffect vai rodar toda vez que a página do Dashboard for montada
@@ -40,7 +40,7 @@ function Cadastro() {
         }
         TabThree={
           <Table
-            patientes={attendedPatients}
+            patientes={triagePatients}
             mensagem={"Nenhuma ficha de paciente"}
             tv={false}
             Actions={(patient) => <RegistrationButons id={patient.id} />}

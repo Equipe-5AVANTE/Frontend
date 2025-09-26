@@ -2,6 +2,7 @@ import React from "react";
 import { useAuth } from "../../context/Auth";
 import { usePatientsStates } from "../../context";
 import api from "../../api";
+import { toast } from "react-toastify";
 
 function DoctorButons({ patientId, level }) {
   const { user } = useAuth();
@@ -18,10 +19,10 @@ function DoctorButons({ patientId, level }) {
       // 2. Atualizar paciente (muda o level para 1 = agendado)
       await updatePatient(patientId, { level: 1 });
 
-      alert("Consulta agendada com sucesso!");
+      toast.success("Consulta agendada com sucesso!");
     } catch (error) {
       console.error("Erro ao agendar consulta:", error);
-      alert("Não foi possível agendar a consulta.");
+    toast.error("Erro ao agendar consulta. Tente novamente.");
     }
   };
 

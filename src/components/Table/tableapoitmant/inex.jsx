@@ -74,7 +74,11 @@ function Table2({ Actions, mensagem = "Nenhum registro" }) {
               <td>
                 {item.endTime ? new Date(item.endTime).toLocaleString() : "-"}
               </td>
-              <td>{Actions ? Actions(item) : "-"}</td>
+              <td>
+                {Actions
+                  ? Actions(item, { fetchAppointments, setAppointments })
+                  : "-"}
+              </td>
             </tr>
           ))
         ) : (

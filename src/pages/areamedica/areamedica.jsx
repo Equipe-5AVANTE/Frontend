@@ -5,11 +5,11 @@ import Table2 from "../../components/Table/tableapoitmant/inex";
 import Tabs from "../../components/Tabs";
 import { usePatientsStates } from "../../context";
 import { useEffect } from "react";
+import FinishButton from "../../components/Butons/apintment";
 
 function AreaMedica() {
-  const { triagePatients, attendedPatients,isLoading, updatePatient, reloadPatients } =
+  const { triagePatients, isLoading, updatePatient, reloadPatients } =
     usePatientsStates();
-
 
   // Este useEffect vai rodar toda vez que a página do Dashboard for montada
   useEffect(() => {
@@ -23,10 +23,10 @@ function AreaMedica() {
     <>
       <Tabs
         title={"Área Médica"}
-         Tab={true}
+        Tab={true}
         subtitleUne={"Atendimento"}
         subtitleTwo={"controele de pacientes"}
-          nameTabThree={"Retire sua ficha"}
+        nameTabThree={"Retire sua ficha"}
         tabUne={
           <Table
             patientes={triagePatients}
@@ -41,11 +41,20 @@ function AreaMedica() {
           />
         }
         tabTwo={
-         <Table2></Table2>
+          <Table2
+            mensagem="Nenhum atendimento encontrado"
+            Actions={(appointment, helpers) => (
+              <FinishButton
+                appointmentId={appointment.id}
+                patientId={appointment.patientId}
+                helpers={helpers} // 👈 passa os dois helpers
+              />
+            )}
+          />
         }
-          TabThree={
+        TabThree={
           <Table
-            patientes={attendedPatients}
+            patientes={triagePatients}
             mensagem={"Nenhuma ficha de paciente"}
             tv={false}
             Actions={(patient) => <RegistrationButons id={patient.id} />}
