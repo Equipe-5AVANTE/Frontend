@@ -1,27 +1,22 @@
-import { usePatientesStates } from "../../context";
+import { usePatientsStates } from "../../context";
 import ListTV from "../../components/Tv/List";
 import CardTV from "../../components/Tv/Card";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
 function TV() {
-  const { filterDoctor } = usePatientesStates();
-  const [nextPatient, setNextPatient] = useState();
-  const [treatedPatients, setTreatedPatients] = useState([]);
+  const { triagePatients, doctorPatients, isLoading,reloadPatients } = usePatientsStates();
+  // Este useEffect vai rodar toda vez que a página do Dashboard for montada
+    useEffect(() => {
+      console.log("Montando Dashboard, recarregando pacientes...");
+      reloadPatients();
+    }, [reloadPatients]); // Dependa da função para garantir consistência
+    if (isLoading) {
+      return <div>Carregando pacientes...</div>;
+    }
 
-  useEffect(() => {
-    const foundNextPatient = filterDoctor.find((p) => p.status === 0);
+  const nextPatient = triagePatients.length > 0 ? triagePatients[0] : undefined;
 
-    const foundTreatedPatients = filterDoctor.filter((p) => p.status === 1);
-
-    setNextPatient(foundNextPatient);
-
-    const treatedPatientsNames = foundTreatedPatients.map(
-      (patient) => patient.name
-    );
-    setTreatedPatients(treatedPatientsNames);
-  }, [filterDoctor]);
-
-  console.log("Pacientes em atendimento:", treatedPatients);
+  const treatedPatientsNames = doctorPatients.map(patient => patient.name);
 
   return (
     <section className="container align-items-center pt-3">
@@ -29,22 +24,20 @@ function TV() {
         <div className="col-12 col-md-8 px-2 text-center mb-4 mb-md-0">
           <CardTV
             header={"Paciente(s) em atendimento"}
-            patient={treatedPatients}
+            patient={treatedPatientsNames}
             message={"Nenhum paciente em atendimento"}
           />
         </div>
         <div className="col-12 col-md-4 text-center ps-5">
           <CardTV
-            header={
-              treatedPatients.length === 0 ? "Em chamado" : "Próximo paciente"
-            }
+            header={"Próximo paciente"}
             patient={nextPatient?.name}
-            message={treatedPatients.length === 0 ? "chamando" : "proximo"}
+            message={"Aguardando atendimento"}
           />
         </div>
         <div className="col-12 text-center">
           <ListTV
-            patientes={filterDoctor}
+            patientes={triagePatients.slice(1)}
             mensagem={"Nenhum paciente em espera"}
           />
         </div>
