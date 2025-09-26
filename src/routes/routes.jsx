@@ -12,6 +12,7 @@ import Home from "../pages/home/home.jsx";
 import AreaMedica from "../pages/areamedica/areamedica.jsx";
 import Cadastro from "../pages/cadastro/cadastro.jsx";
 import Unauthorized from "../pages/unauthorized/index.jsx";
+import CadastroUser from "../pages/cadastroUserPage/index.jsx";
 
 function RoutesNav() {
   return (
@@ -38,9 +39,7 @@ function RoutesNav() {
                   path="/regitroUsuario"
                   element={
                     <PrivateRoute roles={["DOCTOR"]}>
-                      <h1 className="text-center">
-                        Registro de Usuário (Admin)
-                      </h1>
+                      <CadastroUser/>
                     </PrivateRoute>
                   }
                 />
