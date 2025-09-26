@@ -37,7 +37,7 @@ function TV() {
         </div>
         <div className="col-12 text-center">
           <ListTV
-            patientes={triagePatients.slice(1)}
+            patientes={triagePatients}
             mensagem={"Nenhum paciente em espera"}
           />
         </div>
