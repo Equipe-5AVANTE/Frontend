@@ -1,37 +1,50 @@
-import { useState } from "react";
+import React from "react";
+import { useAuth } from "../../context/Auth";
+import { usePatientsStates } from "../../context";
+import api from "../../api";
 
-function DoctorButons({ id, onUpdateStatus }) {
-  const [cor, setCor] = useState("btn-info");
+function DoctorButons({ patientId, level }) {
+  const { user } = useAuth();
+  const { updatePatient } = usePatientsStates(); // 👈 atualiza estado global
 
-  const handleClick = (newStatus, newColor) => {
-    onUpdateStatus(id, newStatus);
-    setCor(newColor);
+  const handleSchedule = async () => {
+    try {
+      // 1. Criar agendamento no backend
+      await api.post(`/appointments/${user?.id}/${patientId}`, {
+        endTime: null,
+        status: "PENDING",
+      });
+
+      // 2. Atualizar paciente (muda o level para 1 = agendado)
+      await updatePatient(patientId, { level: 1 });
+
+      alert("Consulta agendada com sucesso!");
+    } catch (error) {
+      console.error("Erro ao agendar consulta:", error);
+      alert("Não foi possível agendar a consulta.");
+    }
   };
 
-  return (
-    <>
-      <button
-        className={`btn ${cor} btn-sm me-1`}
-        onClick={() => handleClick(1, "btn-warning")}
-        type="button"
-        disabled={cor !== "btn-info"}
-      >
-        {cor === "btn-info" ? "Atender" : "Em atendimento"}
-      </button>
+  const renderButtons = () => {
+    switch (level) {
+      case 0: // Paciente na triagem
+        return (
+          <button className="btn btn-info btn-sm" onClick={handleSchedule}>
+            Agendar
+          </button>
+        );
+      case 1: // Paciente já agendado
+        return (
+          <button className="btn btn-warning btn-sm" disabled>
+            Agendado
+          </button>
+        );
+      default:
+        return <span className="badge bg-secondary">Desconhecido</span>;
+    }
+  };
 
-      {cor === "btn-warning" && (
-        <button
-          className="btn btn-success btn-sm"
-          onClick={() => handleClick(2, "btn-success")}
-          type="button"
-        >
-          Finalizar
-        </button>
-      )}
-    </>
-  );
+  return <>{renderButtons()}</>;
 }
 
 export default DoctorButons;
-
-

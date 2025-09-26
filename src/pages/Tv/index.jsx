@@ -1,9 +1,18 @@
 import { usePatientsStates } from "../../context";
 import ListTV from "../../components/Tv/List";
 import CardTV from "../../components/Tv/Card";
+import { useEffect } from "react";
 
 function TV() {
-  const { triagePatients, doctorPatients } = usePatientsStates();
+  const { triagePatients, doctorPatients, isLoading,reloadPatients } = usePatientsStates();
+  // Este useEffect vai rodar toda vez que a página do Dashboard for montada
+    useEffect(() => {
+      console.log("Montando Dashboard, recarregando pacientes...");
+      reloadPatients();
+    }, [reloadPatients]); // Dependa da função para garantir consistência
+    if (isLoading) {
+      return <div>Carregando pacientes...</div>;
+    }
 
   const nextPatient = triagePatients.length > 0 ? triagePatients[0] : undefined;
 
@@ -23,7 +32,7 @@ function TV() {
           <CardTV
             header={"Próximo paciente"}
             patient={nextPatient?.name}
-            message={"Aguardando na triagem"}
+            message={"Aguardando atendimento"}
           />
         </div>
         <div className="col-12 text-center">

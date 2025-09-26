@@ -23,7 +23,7 @@ function Table ({Actions, patientes, mensagem}) {
                   <LevelDot patient={t.level} />{" "}
                 </td>
                 <td>{t.reason}</td>
-                <td>{Actions(t.id)}</td>
+                <td>{Actions(t)}</td>
               </tr>
             ))
           ) : (

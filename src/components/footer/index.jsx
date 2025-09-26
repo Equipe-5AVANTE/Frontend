@@ -27,9 +27,9 @@ function Footer() {
               <a
                 className="text-body"
                 target="_blank"
-                href="https://github.com/xeniabia/atendimentodepacientes?tab=readme-ov-file"
+                href="https://github.com/Equipe-5AVANTE"
               >
-                Repositório Git hub
+                Organização Git hub
               </a>
             </h6>
           </div>

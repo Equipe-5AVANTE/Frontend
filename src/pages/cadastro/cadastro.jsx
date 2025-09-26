@@ -4,9 +4,19 @@ import TrigeButons from "../../components/Butons/TrigeButons";
 import Tabs from "../../components/Tabs";
 import { usePatientsStates } from "../../context";
 import RegistrationButons from "../../components/Butons/RegistrationButons";
+import { useEffect } from "react";
 function Cadastro() {
-  const { addPatient, triagePatients, attendedPatients, updatePatient } =
+  const { addPatient, triagePatients, attendedPatients, updatePatient, reloadPatients,isLoading } =
     usePatientsStates();
+
+    // Este useEffect vai rodar toda vez que a página do Dashboard for montada
+      useEffect(() => {
+        console.log("Montando Dashboard, recarregando pacientes...");
+        reloadPatients();
+      }, [reloadPatients]); // Dependa da função para garantir consistência
+      if (isLoading) {
+        return <div>Carregando pacientes...</div>;
+      }
 
   return (
     <>
@@ -22,9 +32,9 @@ function Cadastro() {
           <Table
             patientes={triagePatients}
             mensagem={"Nenhum paciente em triagem"}
-            Actions={(id) => (
+            Actions={(patient) => (
               // A função `updatePatient` do contexto é passada como a prop `onUpdateLevel`
-              <TrigeButons id={id} onUpdateLevel={updatePatient} />
+              <TrigeButons id={patient.id} onUpdateLevel={updatePatient} />
             )}
           />
         }
@@ -33,7 +43,7 @@ function Cadastro() {
             patientes={attendedPatients}
             mensagem={"Nenhuma ficha de paciente"}
             tv={false}
-            Actions={(id) => <RegistrationButons id={id} />}
+            Actions={(patient) => <RegistrationButons id={patient.id} />}
           />
         }
       />
